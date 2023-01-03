@@ -1,5 +1,4 @@
 import { Grid } from "./components/grid";
-import { Tile } from "./components/tile";
 function App() {
   return (
     <>

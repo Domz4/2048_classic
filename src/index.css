@@ -17,10 +17,15 @@ body {
   height: 100vh;
   background-color: rgb(29, 32, 36);
 }
+.welcome_screen {
+  display: flex;
+  flex-direction: column;
+  background-color: gray;
+  border-radius: 1vmin;
+  padding: 3vmin;
+}
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 20vmin);
-  grid-template-rows: repeat(4, 20vmin);
   background-color: rgb(50, 51, 60);
   gap: 2vmin;
   border-radius: 1vmin;

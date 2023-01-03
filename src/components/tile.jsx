@@ -1,16 +1,18 @@
 import { useState } from "react";
 
-export const Tile = () => {
-  const [tileValue, setTileValue] = useState();
+export const Tile = ({ radius }) => {
+  const [tileValue, setTileValue] = useState("90%");
   const generateRandom = () => {
     return Math.random();
   };
-  const dynamicColor = {
+  const styles = {
     backgroundColor: `hsl(354, 100%, ${tileValue})`,
+    width: radius,
+    heigh: radius,
   };
   return (
     <>
-      <div className="tile" style={dynamicColor}></div>
+      <div className="tile" style={styles}></div>
     </>
   );
 };
