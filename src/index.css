@@ -20,16 +20,17 @@ body {
 .welcome_screen {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: gray;
   border-radius: 1vmin;
-  padding: 3vmin;
+  padding: 1vmin;
+  width: 50vmin;
+  height: 40vmin;
 }
 .grid {
-  display: grid;
   background-color: rgb(50, 51, 60);
-  gap: 2vmin;
   border-radius: 1vmin;
-  padding: 2vmin;
   position: relative;
 }
 .cell {
@@ -38,9 +39,19 @@ body {
   box-shadow: 5px 5px 9px rgb(10, 10, 10);
 }
 .tile {
-  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 1vmin;
+}
+input {
+  width: 75%;
+}
+button {
+  all: unset;
+  border: solid;
+  padding: 0.3rem 5rem;
+  border-radius: 0.7vmin;
+  margin-top: 2rem;
+  background-color: rgb(185, 185, 185);
 }

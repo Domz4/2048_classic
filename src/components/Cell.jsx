@@ -1,6 +1,6 @@
-export const Cell = () => {
-  const boardSize = (size = 4) => {
-    return Array.from({ length: size * size }).map((_,i) => (
+export const Cell = ({ radius }) => {
+  const boardSize = () => {
+    return Array.from({ length: radius * radius }).map((_, i) => (
       <div key={i} className="cell"></div>
     ));
   };

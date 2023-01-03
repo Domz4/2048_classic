@@ -11,7 +11,13 @@ export const Grid = () => {
   const handleStart = () => {
     setRenderGame(false);
   };
-  console.log(renderGame.current, radius);
+  const girdStyle = {
+    display: `grid`,
+    gridTemplateColumns: `repeat(${radius}, ${60 / radius}vmin)`,
+    gridTemplateRows: `repeat(${radius}, ${60 / radius}vmin)`,
+    gap: `${8 / radius}vmin`,
+    padding: `${8 / radius}vmin`,
+  };
   return renderGame ? (
     <>
       <div className="welcome_screen">
@@ -27,8 +33,8 @@ export const Grid = () => {
       </div>
     </>
   ) : (
-    <div className="grid">
-      <Cell></Cell>
+    <div style={girdStyle} className="grid">
+      <Cell radius={radius}></Cell>
       <Tile radius={radius}></Tile>
     </div>
   );
