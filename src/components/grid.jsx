@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Cell } from "./Cell";
-import { Tile } from "./tile";
 
 export const Grid = () => {
   const [renderGame, setRenderGame] = useState(true);
@@ -35,7 +34,6 @@ export const Grid = () => {
   ) : (
     <div style={girdStyle} className="grid">
       <Cell radius={radius}></Cell>
-      <Tile radius={radius}></Tile>
     </div>
   );
 };
