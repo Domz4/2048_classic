@@ -2,14 +2,12 @@ import { useState } from "react";
 import { Cell } from "./Cell";
 
 export const Grid = () => {
-  const [renderGame, setRenderGame] = useState(true);
+  const [initalRender, setInitialRender] = useState(false);
   const [radius, setRadius] = useState(4);
   const handleGameRadius = (e) => {
     setRadius(e.target.value);
   };
-  const handleStart = () => {
-    setRenderGame(false);
-  };
+
   const girdStyle = {
     display: `grid`,
     gridTemplateColumns: `repeat(${radius}, ${60 / radius}vmin)`,
@@ -17,7 +15,7 @@ export const Grid = () => {
     gap: `${8 / radius}vmin`,
     padding: `${8 / radius}vmin`,
   };
-  return renderGame ? (
+  return initalRender ? (
     <>
       <div className="welcome_screen">
         <h1>Select game size: {radius}</h1>
@@ -28,7 +26,7 @@ export const Grid = () => {
           value={radius}
           onChange={handleGameRadius}
         />
-        <button onClick={handleStart}>Start</button>
+        <button onClick={() => setInitialRender(!initalRender)}>Start</button>
       </div>
     </>
   ) : (

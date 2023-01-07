@@ -1,24 +1,28 @@
-import { useState, useEffect } from "react";
-
-export const Tile = ({ radius, cells, cellsByColumn, cellsByRow }) => {
-  const [tiles, setTiles] = useState([]);
-
+import { useEffect } from "react";
+import _ from "lodash";
+export const Tile = ({
+  radius,
+  cells,
+  cellsByColumn,
+  cellsByRow,
+  setCells,
+}) => {
   useEffect(() => {
-    for (let i = 0; i < 2; i++) {
-      if (cells.length > 0) {
-        let emptyCells = cells.filter((cell) => cell.value === 0);
-        if (emptyCells.length > 1) {
-          emptyCells[Math.floor(Math.random() * emptyCells.length)].value =
-            Math.random() > 0.5 ? 2 : 4;
-        }
+    createTiles(cells);
+  }, []);
+  console.log(cells, "cells");
+  const createTiles = (cells) => {
+    const zeroCells = cells.filter((e) => e.value === 0);
+    const randomCells = _.sampleSize(zeroCells, 2);
+    const updatedCells = cells.map((cell) => {
+      if (randomCells.includes(cell)) {
+        return { ...cell, value: _.sample([2, 4]) };
       }
-    }
-    handleCreateTiles(cells);
-  }, [cells]);
-
-  const handleCreateTiles = (cells) => {
+      return cell;
+    });
+    console.log(cells);
     setTimeout(() => {
-      let activeTiles = cells
+      let newTiles = updatedCells
         .filter((cell) => cell.value !== 0)
         .map((e) => {
           const tileStyles = {
@@ -26,8 +30,8 @@ export const Tile = ({ radius, cells, cellsByColumn, cellsByRow }) => {
             color: `hsl(354, 100%, ${100 - (100 - Math.log2(e.value) * 9)}%)`,
             width: `${60 / radius}vmin`,
             height: `${60 / radius}vmin`,
-            top: `${e.x * (8 / radius + 60 / radius) + 8 / radius}vmin`,
-            left: `${e.y * (8 / radius + 60 / radius) + 8 / radius}vmin`,
+            top: `${e.y * (8 / radius + 60 / radius) + 8 / radius}vmin`,
+            left: `${e.x * (8 / radius + 60 / radius) + 8 / radius}vmin`,
           };
           const tileProps = {
             x: e.x,
@@ -36,43 +40,77 @@ export const Tile = ({ radius, cells, cellsByColumn, cellsByRow }) => {
             value: e.value,
             key: e.key,
           };
-          e.tile = tileProps;
-          return tileProps;
+          return (e.tile = tileProps);
         });
-      setTiles(activeTiles);
+      console.log(newTiles);
+      setCells(newTiles);
     }, 500);
   };
-  console.log(cells, tiles);
-  const slideTiles = (cells) => {
-    cells.forEach((group) => {
-      for (let i = 0; i < group.length; i++) {
-        const cell = group[i];
-        if (cell.tile === null) continue;
+  useEffect(() => {
+    window.addEventListener("keydown", handleSlide, { once: true });
+
+    return () => {
+      window.removeEventListener("keydown", handleSlide, { once: true });
+    };
+  });
+  function handleSlide(e) {
+    switch (e.key) {
+      case "ArrowUp":
+        tileMoves(cellsByColumn);
+        break;
+      case "ArrowDown":
+        tileMoves(cellsByColumn.map((column) => [...column].reverse()));
+        break;
+      case "ArrowLeft":
+        tileMoves(cellsByRow);
+        break;
+      case "ArrowRight":
+        tileMoves(cellsByRow.map((row) => [...row].reverse()));
+        break;
+      default:
+        document.addEventListener("keydown", handleSlide, { once: true });
+        return;
+    }
+    document.addEventListener("keydown", handleSlide, { once: true });
+  }
+  function tileMoves(cellsBy) {
+    cellsBy.forEach((e) => {
+      for (let i = 1; i < e.length; i++) {
+        const cell = e[i];
+        if (cell.tile == null) continue;
         let lastValid;
         for (let j = i - 1; j >= 0; j--) {
-          if (!group[j]) break;
-          lastValid = group[j];
+          const aboveCell = e[j];
+
+          if (
+            !cell.tile == null ||
+            (cell.tile.merge == null && aboveCell.value === cell.tile.value)
+          )
+            break;
+          lastValid = aboveCell;
         }
         if (lastValid != null) {
           if (lastValid.tile != null) {
-            lastValid.mergeTile = cell.tile;
+            lastValid.merge = cell.tile;
           } else {
             lastValid.tile = cell.tile;
+            console.log(lastValid, "lastvalid");
+            const updatedTiles = cells.map((e) => {
+              console.log(e, "e");
+              if (lastValid.tile.key === e.key) {
+                return { ...e, x: lastValid.x, y: lastValid.y };
+              }
+              return e;
+            });
+            console.log(updatedTiles);
           }
-          cell.tile = null;
         }
       }
     });
-  };
-  function merge (val) {
-    return val == null ? null : 
-  }
-  function acceptTile(tile) {
-    return tile == null;
   }
   return (
     <>
-      {tiles.map((e) => {
+      {cells.map((e) => {
         return (
           <div className="tile" style={e.style} key={e.key}>
             {e.value}

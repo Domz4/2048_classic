@@ -6,23 +6,6 @@ export const Cell = ({ radius }) => {
   const [cellsByColumn, setCellsByColumn] = useState([]);
   const [cellsByRow, setCellsByRow] = useState([]);
 
-  const byRow = () => {
-    const newCells = cells.reduce((cellGrid, cell) => {
-      cellGrid[cell.y] = cellGrid[cell.y] || [];
-      cellGrid[cell.y][cell.x] = cell;
-      return cellGrid;
-    }, []);
-    setCellsByRow(newCells);
-  };
-  const byColumn = () => {
-    const newCells = cells.reduce((cellGrid, cell) => {
-      cellGrid[cell.x] = cellGrid[cell.x] || [];
-      cellGrid[cell.x][cell.y] = cell;
-      return cellGrid;
-    }, []);
-    setCellsByColumn(newCells);
-  };
-
   useEffect(() => {
     const boardFill = () => {
       return Array.from({ length: radius * radius }).map((_, i) => {
@@ -32,17 +15,32 @@ export const Cell = ({ radius }) => {
           y: Math.floor(i / radius),
           value: 0,
           tile: null,
+          merge: undefined,
         };
       });
     };
     setCells(boardFill());
   }, [radius]);
-
   useEffect(() => {
+    const byRow = () => {
+      const newCells = cells.reduce((cellGrid, cell) => {
+        cellGrid[cell.y] = cellGrid[cell.y] || [];
+        cellGrid[cell.y][cell.x] = cell;
+        return cellGrid;
+      }, []);
+      setCellsByRow(newCells);
+    };
+    const byColumn = () => {
+      const newCells = cells.reduce((cellGrid, cell) => {
+        cellGrid[cell.x] = cellGrid[cell.x] || [];
+        cellGrid[cell.x][cell.y] = cell;
+        return cellGrid;
+      }, []);
+      setCellsByColumn(newCells);
+    };
     byColumn();
     byRow();
   }, [cells]);
-
   return (
     <>
       {cells.map((e) => (
@@ -53,6 +51,7 @@ export const Cell = ({ radius }) => {
         cells={cells}
         cellsByColumn={cellsByColumn}
         cellsByRow={cellsByRow}
+        setCells={setCells}
       ></Tile>
     </>
   );
