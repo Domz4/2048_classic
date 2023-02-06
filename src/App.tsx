@@ -1,4 +1,5 @@
-import { Grid } from "./components/grid";
+import * as React from "react";
+import { Grid } from "./components/board/grid";
 function App() {
   return (
     <>

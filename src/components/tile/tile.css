@@ -1,0 +1,9 @@
+.tile {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1vmin;
+  animation: show 200ms ease-in-out;
+  transition: 75ms ease-in-out;
+}
